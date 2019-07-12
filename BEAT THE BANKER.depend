@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1562809174 source:d:\beat the banker\management.c
+1562896944 source:d:\beat the banker\management.c
 	<stdio.h>
 	<stdlib.h>
 	<SDL.h>
@@ -8,6 +8,7 @@
 	<fmod.h>
 	"consts.h"
 	"management.h"
+	"menu.h"
 
 1325742239 c:\program files (x86)\codeblocks\sdl-1.2.15\include\sdl.h
 	"SDL_main.h"
@@ -212,10 +213,10 @@
 
 1562806630 d:\beat the banker\consts.h
 
-1562808988 d:\beat the banker\management.h
+1562891579 d:\beat the banker\management.h
 	"consts.h"
 
-1562810906 source:d:\beat the banker\main.c
+1562897474 source:d:\beat the banker\main.c
 	<stdio.h>
 	<stdlib.h>
 	<SDL.h>
@@ -224,4 +225,18 @@
 	<fmod.h>
 	"management.h"
 	"consts.h"
+	"menu.h"
+
+1562900708 source:d:\beat the banker\menu.c
+	<stdio.h>
+	<stdlib.h>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<fmod.h>
+	"management.h"
+	"consts.h"
+	"menu.h"
+
+1562897474 d:\beat the banker\menu.h
 

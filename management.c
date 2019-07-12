@@ -21,6 +21,7 @@
 #include <fmod.h>
 #include "consts.h"
 #include "management.h"
+#include "menu.h"
 
 
 /*-----------------------------------------------------------------------------------*/
@@ -75,3 +76,39 @@
 
     /*---------------------------------------------------------------------------------------------------------------*/
 
+
+
+    void breakProcess(void)
+        {
+            SDL_WaitEvent(NULL);
+        }
+
+    /*---------------------------------------------------------------------------------------------------------------*/
+
+    SDL_bool check_focus(SDL_Event *event)
+                {
+                    if( ( (event->active.state & SDL_APPMOUSEFOCUS) == SDL_APPMOUSEFOCUS ) || ( (event->active.state & SDL_APPINPUTFOCUS) == SDL_APPINPUTFOCUS) || ((event->active.state & SDL_APPACTIVE) == SDL_APPACTIVE ) )
+                            {
+
+                                    if(!event->active.gain)
+                                        return SDL_FALSE;
+                                    else
+                                        return SDL_TRUE;
+
+                            }
+                   else
+                       return SDL_TRUE;
+
+                }
+
+
+    /*---------------------------------------------------------------------------------------------------------------*/
+
+
+    SDL_Rect set_position(SDL_Rect *position , int x , int y)
+                    {
+                        position->x = x;
+                        position->y = y;
+
+                        return *position;
+                    }

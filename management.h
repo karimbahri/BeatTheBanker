@@ -30,6 +30,9 @@
 
     void SDL_ExitWithError(ERROR_TYPE error , char *txt);
     SDL_bool collision_MouseTest(EVENT_TYPE mouse,int width , int height , SDL_Rect pos , SDL_Event event);
+    void breakProcess(void);
+    SDL_bool check_focus(SDL_Event *event);
+    SDL_Rect set_position(SDL_Rect *position , int x , int y);
 
     /*-------------------------------------------------------------------*/
 

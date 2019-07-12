@@ -23,7 +23,7 @@
 #include <fmod.h>
 #include "management.h"
 #include "consts.h"
-
+#include "menu.h"
 
 /*-----------------------------------------------------------------------------------*/
 
@@ -35,8 +35,6 @@
                     /*-------------------------DECLARATIONS-------------------------*/
                         SDL_Surface *screen = NULL;
                         FMOD_SYSTEM *system = NULL;
-                        FMOD_SOUND *openingSound = NULL;
-                        SDL_Event event;
                         SDL_bool running = SDL_TRUE;
                         FMOD_RESULT result = FMOD_OK;
 
@@ -58,12 +56,6 @@
                             if(result != FMOD_OK)
                                 SDL_ExitWithError(FMOD,"Initialization error of FMOD");
 
-                        result = FMOD_System_CreateSound(system,"SOUNDS/menuSound.mp3",FMOD_CREATESTREAM | FMOD_2D,NULL,&openingSound);
-
-                            if(result != FMOD_OK)
-                                SDL_ExitWithError(FMOD,"Initialization error of FMOD SOUND");
-
-
 
                         SDL_WM_SetCaption("BEAT THE BANKER",NULL);
 
@@ -78,22 +70,9 @@
 
                             /*-----------------main-----------------*/
 
-                                    FMOD_System_PlaySound(system,openingSound,0,0,NULL);
-
-                                    while(running)
-                                            {
-                                                SDL_PollEvent(&event);
-
-                                                    switch(event.type)
-                                                        {
-                                                            case SDL_QUIT:
-                                                                running = SDL_FALSE;
-                                                                    break;
-
-                                                        }
 
 
-                                            }
+                                    menu(screen,system);
 
 
                             /*-----------------main-----------------*/
@@ -103,7 +82,7 @@
 
 
 
-                        FMOD_Sound_Release(openingSound);
+
 
                         FMOD_System_Close(system);
 
