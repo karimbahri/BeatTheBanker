@@ -44,7 +44,7 @@
                         fprintf(stderr,"%s .",txt);
 
 
-
+                    exit(EXIT_FAILURE);
         }
 
 
@@ -55,21 +55,35 @@
                 {
                     if(mouse == CLICK)
                                 {
-                                    if( (event.button.x > pos.x && event.button.x < (pos.x + width) ) && (event.button.y > pos.y && event.button.y < (pos.y + height) ))
-                                            return SDL_TRUE;
-                                    else
-                                            return SDL_FALSE;
-                                }
-                    if(mouse == MOTION)
-                                {
-                                    if( (event.motion.x > pos.x && event.motion.x < (pos.x + width) ) && (event.motion.y > pos.y && event.motion.y < (pos.y + height) ))
-                                            return SDL_TRUE;
 
-                                    else
+                                    if(event.type == SDL_MOUSEBUTTONDOWN)
+                                        {
+                                            if(event.button.button == SDL_BUTTON_LEFT)
+                                                {
+                                                    if( (event.button.x > pos.x && event.button.x < (pos.x + width) ) && (event.button.y > pos.y && event.button.y < (pos.y + height) ))
+                                                            return SDL_TRUE;
+                                                    else
+                                                            return SDL_FALSE;
+                                                }
+                                            else
+                                                    return SDL_FALSE;
+                                        }
+                                   else
                                             return SDL_FALSE;
                                 }
-                    else
-                                      return SDL_FALSE;
+
+                    else if(mouse == MOTION)
+                                {
+
+                                            if( (event.motion.x > pos.x && event.motion.x < (pos.x + width) ) && (event.motion.y > pos.y && event.motion.y < (pos.y + height) ))
+                                                    return SDL_TRUE;
+                                            else
+                                                    return SDL_FALSE;
+
+                                }
+                   else
+                                            return SDL_FALSE;
+
 
                 }
 
