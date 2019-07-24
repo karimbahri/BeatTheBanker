@@ -24,6 +24,7 @@
 #include "management.h"
 #include "consts.h"
 #include "menu.h"
+#include "game.h"
 
 
     SDL_bool menu(SDL_Surface *screen , FMOD_SYSTEM *system)
@@ -35,7 +36,7 @@
                 FMOD_SOUND *openingSound = NULL , *click = NULL;
                 SDL_Event event;
                 SDL_Rect posMenuBackground , posStart , posOpt , posExi;
-                SDL_bool running = SDL_TRUE;
+                SDL_bool running = SDL_TRUE , menuchoice = SDL_FALSE;
                 FMOD_RESULT result = FMOD_OK;
 
 
@@ -110,7 +111,7 @@
 
              /*-------------------------INITIALISATION-------------------------*/
 
-                //FMOD_System_PlaySound(system,openingSound,0,0,NULL);
+                FMOD_System_PlaySound(system,openingSound,0,0,NULL);
 
                     while(running)
                             {
@@ -126,8 +127,7 @@
 
                                     /*--------------------------------------------*/
 
-                                        if(!check_focus(&event))
-                                            breakProcess();
+
 
                                     /*--------------------------------------------*/
 
@@ -135,15 +135,20 @@
 
                                 SDL_BlitSurface(menuBackground,NULL,screen,&posMenuBackground);
 
-                                if(collision_MouseTest(MOTION,364,81,posStart,event))
+
+
+                                if(collision_MouseTest(MOTION,364,81,&posStart,&event))
                                         {
                                             SDL_BlitSurface(buttonOn,NULL,screen,&posStart);
                                             SDL_BlitSurface(startOn,NULL,screen,&posStart);
 
-                                                if(collision_MouseTest(CLICK,364,81,posStart,event))
-                                                        {
+                                                if(collision_MouseTest(CLICK,364,81,&posStart,&event))
+                                                       {
+
                                                                     FMOD_System_PlaySound(system,click,0,0,NULL);
-                                                        }
+                                                                    menuchoice = SDL_TRUE;
+                                                                    running = SDL_FALSE;
+                                                       }
                                         }
                                 else
 
@@ -152,15 +157,15 @@
                                             SDL_BlitSurface(startOff,NULL,screen,&posStart);
                                         }
 
-                                if(collision_MouseTest(MOTION,364,81,posOpt,event))
+                                if(collision_MouseTest(MOTION,364,81,&posOpt,&event))
                                         {
                                             SDL_BlitSurface(buttonOn,NULL,screen,&posOpt);
                                             SDL_BlitSurface(optOn,NULL,screen,&posOpt);
-
-                                            if(collision_MouseTest(CLICK,364,81,posOpt,event))
-                                                        {
+                                                if(collision_MouseTest(CLICK,364,81,&posOpt,&event))
+                                                       {
                                                                     FMOD_System_PlaySound(system,click,0,0,NULL);
-                                                        }
+                                                       }
+
                                         }
                                 else
 
@@ -169,14 +174,15 @@
                                             SDL_BlitSurface(optOff,NULL,screen,&posOpt);
                                         }
 
-                                if(collision_MouseTest(MOTION,364,81,posExi,event))
+                                if(collision_MouseTest(MOTION,364,81,&posExi,&event))
                                         {
                                             SDL_BlitSurface(buttonOn,NULL,screen,&posExi);
                                             SDL_BlitSurface(exOn,NULL,screen,&posExi);
 
-                                                if(collision_MouseTest(CLICK,364,81,posExi,event))
+                                                if(collision_MouseTest(CLICK,364,81,&posExi,&event))
                                                         {
                                                             FMOD_System_PlaySound(system,click,0,0,NULL);
+                                                            menuchoice = SDL_FALSE;
                                                             running = SDL_FALSE;
                                                         }
                                         }
@@ -190,14 +196,11 @@
                 /*------------------------------------------------------------------------------------*/
 
 
-
-
-
-
-
+                                if(!check_focus(&event))
+                                            breakProcess();
                 /*------------------------------------------------------------------------------------*/
-
                                 SDL_Flip(screen);
+
                             }
 
 
@@ -218,5 +221,6 @@
 
 
                          /*------------------------------MEMORIE RELEASE------------------------------*/
+                                    return menuchoice;
 
         }

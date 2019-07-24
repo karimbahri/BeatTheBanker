@@ -19,9 +19,10 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <fmod.h>
-#include "consts.h"
 #include "management.h"
+#include "consts.h"
 #include "menu.h"
+#include "game.h"
 
 
 /*-----------------------------------------------------------------------------------*/
@@ -51,16 +52,16 @@
     /*---------------------------------------------------------------------------------------------------------------*/
 
 
-    SDL_bool collision_MouseTest(EVENT_TYPE mouse,int width , int height , SDL_Rect pos , SDL_Event event)
+    SDL_bool collision_MouseTest(EVENT_TYPE mouse,int width , int height , SDL_Rect *pos , SDL_Event *event)
                 {
                     if(mouse == CLICK)
                                 {
 
-                                    if(event.type == SDL_MOUSEBUTTONDOWN)
+                                    if(event->type == SDL_MOUSEBUTTONDOWN)
                                         {
-                                            if(event.button.button == SDL_BUTTON_LEFT)
+                                            if(event->button.button == SDL_BUTTON_LEFT)
                                                 {
-                                                    if( (event.button.x > pos.x && event.button.x < (pos.x + width) ) && (event.button.y > pos.y && event.button.y < (pos.y + height) ))
+                                                    if( (event->button.x > pos->x && event->button.x < (pos->x + width) ) && (event->button.y > pos->y && event->button.y < (pos->y + height) ))
                                                             return SDL_TRUE;
                                                     else
                                                             return SDL_FALSE;
@@ -75,17 +76,19 @@
                     else if(mouse == MOTION)
                                 {
 
-                                            if( (event.motion.x > pos.x && event.motion.x < (pos.x + width) ) && (event.motion.y > pos.y && event.motion.y < (pos.y + height) ))
+                                            if( (event->motion.x > pos->x && event->motion.x < (pos->x + width) ) && (event->motion.y > pos->y && event->motion.y < (pos->y + height) ))
                                                     return SDL_TRUE;
                                             else
                                                     return SDL_FALSE;
 
                                 }
-                   else
-                                            return SDL_FALSE;
+
 
 
                 }
+
+
+
 
 
     /*---------------------------------------------------------------------------------------------------------------*/
@@ -101,19 +104,22 @@
 
     SDL_bool check_focus(SDL_Event *event)
                 {
-                    if( ( (event->active.state & SDL_APPMOUSEFOCUS) == SDL_APPMOUSEFOCUS ) || ( (event->active.state & SDL_APPINPUTFOCUS) == SDL_APPINPUTFOCUS) || ((event->active.state & SDL_APPACTIVE) == SDL_APPACTIVE ) )
-                            {
+                    SDL_Rect pos;
+                    set_position(&pos,0,0);
 
-                                    if(!event->active.gain)
-                                        return SDL_FALSE;
-                                    else
-                                        return SDL_TRUE;
+                                    if( ( ( (event->active.state & SDL_APPMOUSEFOCUS) == SDL_APPMOUSEFOCUS)  && (!collision_MouseTest(CLICK,WIDTH,HEIGHT,&pos,event))) || (  (event->active.state & SDL_APPINPUTFOCUS) == SDL_APPINPUTFOCUS) || ((event->active.state & SDL_APPACTIVE) == SDL_APPACTIVE ) )
+                                            {
 
-                            }
-                   else
-                       return SDL_TRUE;
+                                                    if(!event->active.gain)
+                                                        return SDL_FALSE;
+                                                    else
+                                                        return SDL_TRUE;
 
-                }
+                                            }
+                                   else
+                                       return SDL_TRUE;
+
+                                }
 
 
     /*---------------------------------------------------------------------------------------------------------------*/
@@ -126,3 +132,6 @@
 
                         return *position;
                     }
+
+
+     /*--------------------------------------------------------------------------------------------------------------*/

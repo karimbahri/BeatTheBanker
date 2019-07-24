@@ -16,7 +16,7 @@
 
 #define _CONS_T
 
-#define HEIGHT 668
+#define HEIGHT 768
 #define WIDTH 1024
 
     typedef enum

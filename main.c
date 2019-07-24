@@ -24,6 +24,7 @@
 #include "management.h"
 #include "consts.h"
 #include "menu.h"
+#include "game.h"
 
 /*-----------------------------------------------------------------------------------*/
 
@@ -35,6 +36,7 @@
                     /*-------------------------DECLARATIONS-------------------------*/
                         SDL_Surface *screen = NULL;
                         FMOD_SYSTEM *system = NULL;
+                        FMOD_CHANNELGROUP *channelGroup = NULL;
                         SDL_bool running = SDL_TRUE;
                         FMOD_RESULT result = FMOD_OK;
 
@@ -64,6 +66,8 @@
                             if(screen == NULL)
                                 SDL_ExitWithError(SDL,"Initialization error of SDL_Surface");
 
+                        FMOD_System_GetMasterChannelGroup(system,&channelGroup);
+
 
                     /*-------------------------DECLARATIONS-------------------------*/
 
@@ -72,7 +76,10 @@
 
 
 
-                                    menu(screen,system);
+                                    if(menu(screen,system))
+                                        game(screen,system,channelGroup);
+
+
 
 
                             /*-----------------main-----------------*/
