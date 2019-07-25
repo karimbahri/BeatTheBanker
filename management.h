@@ -17,6 +17,7 @@
 #define MANA_GEM_ENT
 
 #include "consts.h"
+#include "game.h"
 
 
     typedef enum
@@ -34,7 +35,7 @@
     SDL_bool check_focus(SDL_Event *event);
     SDL_Rect set_position(SDL_Rect *position , int x , int y);
     SDL_bool Box_TestCollision(SDL_Rect *boxPos , SDL_Event *event , int width , int height , EVENT_TYPE mouse);
-
+    SDL_bool Boxes_TestCollision(SDL_Rect boxesPos[][2] , SDL_Event *event , int width , int height , EVENT_TYPE mouse , boxIndex *index);
     /*-------------------------------------------------------------------*/
 
 #endif // MANA_GEM_ENT

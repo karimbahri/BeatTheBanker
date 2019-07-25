@@ -152,10 +152,14 @@
 
    boxIndex boxChoice(SDL_Surface *screen , SDL_Surface *boxeOn , SDL_Surface *boxeOff , SDL_Rect boxesPos[][2] , SDL_Event *event)
                     {
-                       if(Box_TestCollision(&boxesPos[2][1],event,58,60,MOTION))
-                            SDL_BlitSurface(boxeOn,NULL,screen,&boxesPos[2][1]);
-                       else
-                            SDL_BlitSurface(&boxeOff,NULL,screen,&boxesPos[2][1]);
+
+                        boxIndex index;
+
+                        /*--------------------------------------------------------------------------*/
+                                       if(Boxes_TestCollision(boxesPos,event,58,60,MOTION,&index))
+                                            SDL_BlitSurface(boxeOn,NULL,screen,&boxesPos[index.X][index.Y]);
+                                       else
+                                            SDL_BlitSurface(&boxeOff,NULL,screen,&boxesPos[index.X][index.Y]);
 
 
                     }

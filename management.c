@@ -125,6 +125,23 @@
 
     /*---------------------------------------------------------------------------------------------------------------*/
 
+            SDL_bool Boxes_TestCollision(SDL_Rect boxesPos[][2] , SDL_Event *event , int width , int height , EVENT_TYPE mouse , boxIndex *index)
+                            {
+                                SDL_bool result = SDL_FALSE;
+                                    for(int i = 0 ; i < 12 ; i++)
+                                        for(int j = 0 ; j < 2 ; j++)
+                                                if(Box_TestCollision(&boxesPos[i][j],event,width,height,mouse))
+                                                    {
+                                                        result = SDL_TRUE;
+                                                            index->X = i , index->Y = j;
+                                                    }
+
+                                    return result;
+
+                            }
+
+    /*---------------------------------------------------------------------------------------------------------------*/
+
 
 
     void breakProcess(void)
