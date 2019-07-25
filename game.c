@@ -96,7 +96,7 @@
                                         SDL_BlitSurface(background2,NULL,screen,&posBackground);
                                         SDL_BlitSurface(table,NULL,screen,&posTable);
                                         blitBoxe(screen,boxeOff,boxesPos,12);
-                                        boxChoice(screen,boxeOn,NULL,boxesPos,&event);
+                                        boxChoice(screen,boxeOn,boxesPos,&event);
                                         SDL_Flip(screen);
                                 }
 
@@ -150,7 +150,7 @@
                 }
 
 
-   boxIndex boxChoice(SDL_Surface *screen , SDL_Surface *boxeOn , SDL_Surface *boxeOff , SDL_Rect boxesPos[][2] , SDL_Event *event)
+   boxIndex boxChoice(SDL_Surface *screen , SDL_Surface *boxeOn , SDL_Rect boxesPos[][2] , SDL_Event *event)
                     {
 
                         boxIndex index;
@@ -158,8 +158,7 @@
                         /*--------------------------------------------------------------------------*/
                                        if(Boxes_TestCollision(boxesPos,event,58,60,MOTION,&index))
                                             SDL_BlitSurface(boxeOn,NULL,screen,&boxesPos[index.X][index.Y]);
-                                       else
-                                            SDL_BlitSurface(&boxeOff,NULL,screen,&boxesPos[index.X][index.Y]);
+
 
 
                     }
