@@ -33,6 +33,7 @@
     void breakProcess(void);
     SDL_bool check_focus(SDL_Event *event);
     SDL_Rect set_position(SDL_Rect *position , int x , int y);
+    SDL_bool Box_TestCollision(SDL_Rect *boxPos , SDL_Event *event , int width , int height , EVENT_TYPE mouse);
 
     /*-------------------------------------------------------------------*/
 

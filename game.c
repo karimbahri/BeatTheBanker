@@ -31,7 +31,7 @@
                 {
                     /*-------------------------DECLARATIONS-------------------------*/
 
-                    SDL_Surface *boxe = NULL;
+                    SDL_Surface *boxeOff = NULL , *boxeOn = NULL;
                     SDL_Surface *background1 = NULL , *background2 = NULL , *table = NULL;
                     SDL_Event event;
                     SDL_Rect boxesPos[12][2] , posBackground , posTable;
@@ -58,9 +58,14 @@
                             if(table == NULL)
                                 SDL_ExitWithError(IMG,"Initialization error of SDL_Surface");
 
-                        boxe = IMG_Load("sprites/boxes/1.png");
+                        boxeOn = IMG_Load("sprites/boxes/2.png");
 
-                            if(boxe == NULL)
+                            if(boxeOn == NULL)
+                                SDL_ExitWithError(IMG,"Initialization error of SDL_Surface");
+
+                        boxeOff = IMG_Load("sprites/boxes/1.png");
+
+                            if(boxeOff == NULL)
                                 SDL_ExitWithError(IMG,"Initialization error of SDL_Surface");
 
                         set_position(&posBackground,0,0);
@@ -90,7 +95,8 @@
                                         SDL_BlitSurface(background1,NULL,screen,&posBackground);
                                         SDL_BlitSurface(background2,NULL,screen,&posBackground);
                                         SDL_BlitSurface(table,NULL,screen,&posTable);
-                                        blitBoxe(screen,boxe,boxesPos,12);
+                                        blitBoxe(screen,boxeOff,boxesPos,12);
+                                        boxChoice(screen,boxeOn,NULL,boxesPos,&event);
                                         SDL_Flip(screen);
                                 }
 
@@ -101,7 +107,7 @@
 
                         /*------------------------------MEMORIE RELEASE------------------------------*/
 
-                                SDL_FreeSurface(boxe);
+                                SDL_FreeSurface(boxeOff);
                                 SDL_FreeSurface(background1);
                                 SDL_FreeSurface(background2);
 
@@ -142,3 +148,16 @@
                             SDL_BlitSurface(boxe,NULL,screen,&pos[i][j]);
 
                 }
+
+
+   boxIndex boxChoice(SDL_Surface *screen , SDL_Surface *boxeOn , SDL_Surface *boxeOff , SDL_Rect boxesPos[][2] , SDL_Event *event)
+                    {
+                       if(Box_TestCollision(&boxesPos[2][1],event,58,60,MOTION))
+                            SDL_BlitSurface(boxeOn,NULL,screen,&boxesPos[2][1]);
+                       else
+                            SDL_BlitSurface(&boxeOff,NULL,screen,&boxesPos[2][1]);
+
+
+                    }
+
+

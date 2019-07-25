@@ -16,11 +16,18 @@
 
 #define __GAM___E
 
+    typedef struct
+        {
+            int X , Y;
+
+        }boxIndex;
+
+/*------------------------------------------------------------------------------------*/
 
 void game(SDL_Surface *screen , FMOD_SYSTEM *system , FMOD_CHANNELGROUP *channelgroup );
 void boxesPos_Create(SDL_Rect boxesPos[][2] , int nb);
 void blitBoxe(SDL_Surface *screen , SDL_Surface *boxe , SDL_Rect pos[][2] , int nb);
-//void blitBoxes(SDL_Surface *screen , SDL_Surface *boxesSurface[] , SDL_Rect BoxesPos[][2] , int nb);
+boxIndex boxChoice(SDL_Surface *screen , SDL_Surface *boxeOn , SDL_Surface *boxeOff , SDL_Rect boxesPos[][2] , SDL_Event *event);
 
 
 

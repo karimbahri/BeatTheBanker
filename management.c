@@ -94,6 +94,38 @@
     /*---------------------------------------------------------------------------------------------------------------*/
 
 
+            SDL_bool Box_TestCollision(SDL_Rect *boxPos , SDL_Event *event , int width , int height , EVENT_TYPE mouse)
+                    {
+                        int X = 3 , Y = 29;
+
+                            if(mouse == CLICK)
+                                    {
+                                        if(event->type == SDL_MOUSEBUTTONUP)
+                                           {
+                                            if( ((event->button.x > (boxPos->x + X) ) && (event->button.x < (boxPos->x + width) )) && ( (event->button.y > (boxPos->y + Y) ) && (event->button.y < (boxPos->y + height) ) ) )
+                                                    return SDL_TRUE;
+                                            else
+                                                    return SDL_FALSE;
+                                           }
+                                        else
+                                            return SDL_FALSE;
+
+                                    }
+
+                            else if(mouse == MOTION)
+                                    {
+                                        if( ((event->motion.x > (boxPos->x + X) ) && (event->motion.x < (boxPos->x + width) )) && ( (event->motion.y > (boxPos->y + Y) ) && (event->motion.y < (boxPos->y + height) ) ) )
+                                                    return SDL_TRUE;
+                                            else
+                                                    return SDL_FALSE;
+
+                                    }
+                    }
+
+
+    /*---------------------------------------------------------------------------------------------------------------*/
+
+
 
     void breakProcess(void)
         {
