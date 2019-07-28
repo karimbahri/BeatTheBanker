@@ -53,6 +53,9 @@
                             if(result != FMOD_OK)
                                 SDL_ExitWithError(FMOD,"Initialization error of FMOD SYSTEM OBJECT");
 
+                        if(TTF_Init() == -1)
+                                SDL_ExitWithError(TTF,"Initialization error of TTF");
+
                         result = FMOD_System_Init(system,32,FMOD_INIT_NORMAL,NULL);
 
                             if(result != FMOD_OK)
@@ -96,6 +99,8 @@
                         FMOD_System_Release(system);
 
                         SDL_FreeSurface(screen);
+
+                        TTF_Quit();
 
                         SDL_Quit();
 

@@ -141,6 +141,31 @@
 
                             }
 
+
+
+    /*---------------------------------------------------------------------------------------------------------------*/
+
+           SDL_bool  Boxes_TestEvent(SDL_Event *event , EVENT_TYPE mouse , boxIndex *index)
+                        {
+                            int p = 0;
+
+                            p = event->motion.x / LENGTH;
+                               if(mouse == MOTION)
+                                        {
+                                            if( ( (event->motion.x > (LENGTH * p ) + POS_START ) && (event->motion.x < ( LENGTH * (p + 1) - DISTANCE_BOX_BOX + POS_START) ) ) && ( ( ( event->motion.y > BOX_Y_1 ) && ( event->motion.y < (BOX_Y_1 + BOX_HEIGHT) ) ) || ( ( event->motion.y > BOX_Y_2 ) && ( event->motion.y < (BOX_Y_2 + BOX_HEIGHT) ) ) ) )
+                                                            {
+                                                                index->X = p ;
+                                                                index->Y = ( event->motion.y / (HEIGHT / 2 ) );
+                                                                    return SDL_TRUE;
+
+                                                            }
+                                            else
+                                                return SDL_FALSE;
+                                        }
+
+
+                        }
+
     /*---------------------------------------------------------------------------------------------------------------*/
 
 

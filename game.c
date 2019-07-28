@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -31,7 +32,8 @@
                 {
                     /*-------------------------DECLARATIONS-------------------------*/
 
-                    SDL_Surface *boxeOff = NULL , *boxeOn = NULL;
+                    TTF_Font *font = NULL;
+                    SDL_Surface *boxeOff = NULL , *boxeOn = NULL , *boxesNumberSurface[24] = {NULL};
                     SDL_Surface *background1 = NULL , *background2 = NULL , *table = NULL;
                     SDL_Event event;
                     SDL_Rect boxesPos[12][2] , posBackground , posTable;
@@ -41,6 +43,12 @@
 
 
                         /*-------------------------INITIALISATION-------------------------*/
+
+
+                        font = TTF_OpenFont("Lato-Black.ttf",16);
+
+                        if(font == NULL)
+                            SDL_ExitWithError(TTF,"Initialization error of TTF FONT");
 
 
                         background1 = IMG_Load("sprites/gameBackground1.png");
@@ -107,6 +115,7 @@
 
                         /*------------------------------MEMORIE RELEASE------------------------------*/
 
+                                TTF_CloseFont(font);
                                 SDL_FreeSurface(boxeOff);
                                 SDL_FreeSurface(background1);
                                 SDL_FreeSurface(background2);
@@ -156,11 +165,60 @@
                         boxIndex index;
 
                         /*--------------------------------------------------------------------------*/
-                                       if(Boxes_TestCollision(boxesPos,event,58,60,MOTION,&index))
+                                       //if(Boxes_TestCollision(boxesPos,event,58,60,MOTION,&index))
+                                       if(Boxes_TestEvent(event,MOTION,&index))
                                             SDL_BlitSurface(boxeOn,NULL,screen,&boxesPos[index.X][index.Y]);
 
 
 
                     }
 
+     /*-----------------------------------------------------------------------------------*/
 
+/*
+     SDL_Surface **resizeSurface_box(SDL_Surface *boxes[] , int width , int height , const int nb)
+                            {
+                               for(int i = 0 ; i < nb ; i++)
+                                     boxe[i]->w = width , boxe[i]->h = height;
+
+                                    return boxe;
+
+                            }
+
+     /*-----------------------------------------------------------------------------------*/
+
+  /*   void CreateNumberSurface_box(SDL_Surface *boxesNumber_Surface[] , TTF_Font *font , SDL_Color color , int tab[] , const int nb)
+
+                            {
+                                char txt[3] = { 0 };
+
+                                for(int i = 0 ; i < nb ; i++)
+                                    {
+                                        sprintf(txt,"%d",tab[i]);
+
+                                        boxesNumber_Surface[i] = TTF_RenderText_Solid(font,txt,color);
+
+                                                if(boxesNumber_Surface[i] == NULL)
+                                                    SDL_ExitWithError(TTF,"error of rendering SDL Surface .");
+                                    }
+
+                            }
+*/
+
+       /*-----------------------------------------------------------------------------------*/
+
+  /*  int *generateNumber_Boxes(void)
+                                    {
+                                        srand(time(NULL));
+
+                                        int boxesNumber[24] = {0};
+
+                                            for(int i = 0 ; i < 24 ; i++)
+                                                    {
+
+                                                    }
+
+                                    }
+
+
+*/
