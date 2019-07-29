@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1564358605 source:d:\beat the banker\management.c
+1564368243 source:d:\beat the banker\management.c
 	<stdio.h>
 	<stdlib.h>
 	<SDL.h>
