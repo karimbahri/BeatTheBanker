@@ -106,7 +106,7 @@
                                         SDL_BlitSurface(table,NULL,screen,&posTable);
                                         blitSurfaces(screen,peopleOff,peoplePos,12);
                                         blitSurfaces(screen,boxeOff,boxesPos,12);
-                                        boxChoice(screen,boxeOn,boxesPos,&event);
+                                        boxChoice(screen,boxeOn,peopleOn,boxesPos,peoplePos,&event);
                                         SDL_Flip(screen);
                                 }
 
@@ -165,14 +165,14 @@
 
                                             for( int i = 0 ; i < nb ; i++)
                                                     {
-                                                        sprintf(txt,"sprites/people/%dOn.png",i);
+                                                        sprintf(txt,"sprites/people/%dOn.png",i + 1);
                                                         peopleOn[i] = IMG_Load(txt);
 
                                                             if(peopleOn == NULL)
                                                                     SDL_ExitWithError(IMG,"Initialization error of SDL_Surface");
 
 
-                                                        sprintf(txt,"sprites/people/%dOff.png",i);
+                                                        sprintf(txt,"sprites/people/%dOff.png",i + 1);
                                                         peopleOff[i] = IMG_Load(txt);
 
                                                             if(peopleOff == NULL)
@@ -216,9 +216,12 @@
 
      void peoplePos_Create(SDL_Rect peoplePos[][2] , int nb)
                 {
-                    int X = -16 , Y1 = 53 , Y2 = 380;
+                    int X = 66 , Y1 = 53 , Y2 = 380;
 
-                        for( int i = 0 ; i < nb ; i++ )
+                    set_position(&peoplePos[0][0],10,Y1);
+                    set_position(&peoplePos[0][1],10,Y2);
+
+                        for( int i = 1 ; i < nb ; i++ )
                                     {
                                         set_position(&peoplePos[i][0],X,Y1);
                                         set_position(&peoplePos[i][1],X,Y2);
@@ -244,7 +247,7 @@
                 }
     /*-----------------------------------------------------------------------------------*/
 
-   boxIndex boxChoice(SDL_Surface *screen , SDL_Surface *boxeOn[] , SDL_Rect boxesPos[][2] , SDL_Event *event)
+   boxIndex boxChoice(SDL_Surface *screen , SDL_Surface *boxeOn[] , SDL_Surface *peopleOn[] , SDL_Rect boxesPos[][2] , SDL_Rect peoplePos[][2] , SDL_Event *event)
                     {
 
                         boxIndex index;
@@ -255,6 +258,7 @@
                                        if(Boxes_TestEvent(event,MOTION,&index))
                                         {
                                             i = ( index.Y * 12 ) + index.X ;
+                                            SDL_BlitSurface(peopleOn[i],NULL,screen,&peoplePos[index.X][index.Y]);
                                             SDL_BlitSurface(boxeOn[i],NULL,screen,&boxesPos[index.X][index.Y]);
 
                                         }
