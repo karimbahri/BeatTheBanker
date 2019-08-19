@@ -19,7 +19,7 @@
 /*-----------------------------------------*/
 
 #define HEIGHT 768
-#define WIDTH 1024
+#define WIDTH 1040
 
 /*-----------------------------------------*/
 
@@ -27,7 +27,7 @@
 #define BOX_WIDTH 55
 
 #define LENGTH 84
-#define POS_START 22
+#define POS_START 38//22
 #define DISTANCE_BOX_BOX 29
 
 #define BOX_Y_1 150

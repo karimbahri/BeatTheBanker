@@ -57,7 +57,7 @@
                     if(mouse == CLICK)
                                 {
 
-                                    if(event->type == SDL_MOUSEBUTTONDOWN)
+                                    if(event->type == SDL_MOUSEBUTTONUP)
                                         {
                                             if(event->button.button == SDL_BUTTON_LEFT)
                                                 {
@@ -149,10 +149,10 @@
                         {
                             int p = 0;
 
-                            p = event->motion.x / LENGTH;
+                            p = (event->motion.x - POS_START) / LENGTH;
                                if(mouse == MOTION)
                                         {
-                                            if( ( (event->motion.x > (LENGTH * p ) + POS_START ) && (event->motion.x < ( LENGTH * (p + 1) - DISTANCE_BOX_BOX + POS_START) ) ) && ( ( ( event->motion.y > BOX_Y_1 ) && ( event->motion.y < (BOX_Y_1 + BOX_HEIGHT) ) ) || ( ( event->motion.y > BOX_Y_2 ) && ( event->motion.y < (BOX_Y_2 + BOX_HEIGHT) ) ) ) )
+                                            if( ( (event->motion.x > (LENGTH * p ) + POS_START ) && (event->motion.x < (  LENGTH * (p + 1) - DISTANCE_BOX_BOX + POS_START) ) ) && ( ( ( event->motion.y > BOX_Y_1 ) && ( event->motion.y < (BOX_Y_1 + BOX_HEIGHT) ) ) || ( ( event->motion.y > BOX_Y_2 ) && ( event->motion.y < (BOX_Y_2 + BOX_HEIGHT) ) ) ) )
                                                             {
                                                                 index->X = p ;
                                                                 index->Y = ( event->motion.y / (HEIGHT / 2 ) );
@@ -161,6 +161,27 @@
                                                             }
                                             else
                                                 return SDL_FALSE;
+                                        }
+
+                                else if(mouse == CLICK)
+                                        {
+                                        if(event->type == SDL_MOUSEBUTTONUP)
+                                            {
+
+                                            if( ( (event->button.x > (LENGTH * p ) + POS_START ) && (event->button.x < ( LENGTH * (p + 1) - DISTANCE_BOX_BOX + POS_START) ) ) && ( ( ( event->button.y > BOX_Y_1 ) && ( event->button.y < (BOX_Y_1 + BOX_HEIGHT) ) ) || ( ( event->button.y > BOX_Y_2 ) && ( event->button.y < (BOX_Y_2 + BOX_HEIGHT) ) ) ) )
+                                                            {
+                                                                index->X = p ;
+                                                                index->Y = ( event->button.y / (HEIGHT / 2 ) );
+                                                                    return SDL_TRUE;
+
+                                                            }
+                                            else
+                                                    return SDL_FALSE;
+
+                                            }
+                                        else
+                                            return SDL_FALSE;
+
                                         }
 
 
@@ -210,3 +231,22 @@
 
 
      /*--------------------------------------------------------------------------------------------------------------*/
+
+
+     void box_shift(SDL_Surface *box[] , int beginning , int nb)
+
+            {
+                for(int i = nb-1 ; i > beginning ; i--)
+                                   box[i] = box[i - 1];
+
+
+            }
+
+
+    void changeEvent(SDL_Event *event)
+                {
+                    event->type = SDL_MOUSEMOTION;
+                    event->button.x = WIDTH / 2;
+                    event->button.y = HEIGHT /2;
+
+                }

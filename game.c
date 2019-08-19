@@ -86,11 +86,14 @@
 
 
                 /*------------------------------------------------------------------------------------*/
-
+                if(!Choose_Your_Box(&event,screen,boxeOn,boxeOff,peopleOn,background1,background2,table,boxesPos,peoplePos,&posBackground,&posTable,&posNumber))
+                        running = SDL_FALSE;
+                /*------------------------------------------------------------------------------------*/
+                    changeEvent(&event);
 
                         while(running)
                                 {
-                                    SDL_PollEvent(&event);
+                                        SDL_PollEvent(&event);
 
                                         switch(event.type)
                                             {
@@ -104,10 +107,11 @@
                                         SDL_BlitSurface(background1,NULL,screen,&posBackground);
                                         SDL_BlitSurface(background2,NULL,screen,&posBackground);
                                         SDL_BlitSurface(table,NULL,screen,&posTable);
-                                        blitSurfaces(screen,peopleOff,peoplePos,12);
-                                        blitSurfaces(screen,boxeOff,boxesPos,12);
+                                        blitSurfaces(screen,peopleOff,peoplePos,12,PEOPLE);
+                                        blitSurfaces(screen,boxeOff,boxesPos,12,BOX);
                                         boxChoice(screen,boxeOn,peopleOn,boxesPos,peoplePos,&event);
                                         SDL_Flip(screen);
+
                                 }
 
                 /*------------------------------------------------------------------------------------*/
@@ -201,7 +205,7 @@
 
    void boxesPos_Create(SDL_Rect boxesPos[][2] , int nb)
                 {
-                    int X = 18 , Y1 = 119 , Y2 = 447;
+                    int X = 34 , Y1 = 119 , Y2 = 447;
                     for(int i = 0 ; i < nb ; i++)
                         {
                             set_position(&boxesPos[i][0],X,Y1);
@@ -216,10 +220,11 @@
 
      void peoplePos_Create(SDL_Rect peoplePos[][2] , int nb)
                 {
-                    int X = 66 , Y1 = 53 , Y2 = 380;
+                   // int X = 66 , Y1 = 53 , Y2 = 380;
+                   int X = 100 , Y1 = 53 , Y2 = 380;
 
-                    set_position(&peoplePos[0][0],10,Y1);
-                    set_position(&peoplePos[0][1],10,Y2);
+                    set_position(&peoplePos[0][0],17,Y1);
+                    set_position(&peoplePos[0][1],17,Y2);
 
                         for( int i = 1 ; i < nb ; i++ )
                                     {
@@ -234,16 +239,37 @@
 
      /*-----------------------------------------------------------------------------------*/
 
-   void blitSurfaces(SDL_Surface *screen , SDL_Surface *Surfaces[] , SDL_Rect pos[][2] , int nb)
+   void blitSurfaces(SDL_Surface *screen , SDL_Surface *Surfaces[] , SDL_Rect pos[][2] , int nb , SURFACE_TYPE SURFACE)
                 {
                     int k = 0;
-
+                        if(SURFACE == PEOPLE)
+                            {
                             for(int j = 0 ; j < 2 ; j++)
                                 for(int i = 0 ; i < nb ; i++)
-                                {
-                                SDL_BlitSurface(Surfaces[k],NULL,screen,&pos[i][j]);
-                                k++;
-                                }
+                                    {
+                                      if(pos[i][j].x && pos[i][j].y && Surfaces  )
+                                        {
+                                            SDL_BlitSurface(Surfaces[k],NULL,screen,&pos[i][j]);
+                                            k++;
+                                        }
+
+                                    }
+                            }
+                       else
+                             {
+                            for(int j = 0 ; j < 2 ; j++)
+                                for(int i = 0 ; i < nb ; i++)
+                                    {
+                                      if(pos[i][j].x && pos[i][j].y && Surfaces || (SURFACE == PEOPLE) )
+                                        {
+                                            SDL_BlitSurface(Surfaces[k],NULL,screen,&pos[i][j]);
+
+                                        }
+                                            k++;
+
+                                    }
+                            }
+
                 }
     /*-----------------------------------------------------------------------------------*/
 
@@ -257,10 +283,15 @@
                                        //if(Boxes_TestCollision(boxesPos,event,58,60,MOTION,&index))
                                        if(Boxes_TestEvent(event,MOTION,&index))
                                         {
+                                           if(boxesPos[index.X][index.Y].x && boxesPos[index.X][index.Y].y)
+                                           {
                                             i = ( index.Y * 12 ) + index.X ;
-                                            SDL_BlitSurface(peopleOn[i],NULL,screen,&peoplePos[index.X][index.Y]);
-                                            SDL_BlitSurface(boxeOn[i],NULL,screen,&boxesPos[index.X][index.Y]);
+                                                if(peopleOn != NULL)
+                                                    SDL_BlitSurface(peopleOn[i],NULL,screen,&peoplePos[index.X][index.Y]);
 
+                                                if(boxeOn != NULL)
+                                                    SDL_BlitSurface(boxeOn[i],NULL,screen,&boxesPos[index.X][index.Y]);
+                                           }
                                         }
 
 
@@ -343,6 +374,129 @@
 
                                           return boxesNumber;
                                     }
+
+
+
+
+        /*-----------------------------------------------------------------------------------*/
+
+        SDL_bool Choose_Your_Box(SDL_Event *event , SDL_Surface *screen , SDL_Surface *boxesOn[] , SDL_Surface *boxesOff[]  , SDL_Surface *peopleOn[] , SDL_Surface *background1 , SDL_Surface *background2 , SDL_Surface *table , SDL_Rect BoxesPos[][2] , SDL_Rect peoplePos[][2] , SDL_Rect *posBackground , SDL_Rect *posTable , SDL_Rect *posNumber )
+                        {
+
+                           /*---------------------------------------------DECLARATION---------------------------------------------*/
+
+                            SDL_Surface *text_Surface = NULL;
+                            TTF_Font *font = NULL;
+                            SDL_Rect posTXT;
+                            boxIndex index;
+                            SDL_Color color = { 255 , 0 , 127};
+                            SDL_bool running = SDL_TRUE , keepProcess = SDL_TRUE;
+
+
+
+
+                            /*---------------------------------------------DECLARATION---------------------------------------------*/
+
+                            /*---------------------------------------------INITIALISATION---------------------------------------------*/
+
+                                font = TTF_OpenFont("Nirmala.ttf",72);
+
+                                    if(font == NULL)
+                                        SDL_ExitWithError(TTF,"Initialization error of TTF_FONT.");
+
+                               //TTF_SetFontHinting(font,TTF_HINTING_LIGHT);
+                               //TTF_SetFontStyle(font,TTF_STYLE_BOLD);
+                            /*---------------------------------------------INITIALISATION---------------------------------------------*/
+                                set_position(&posTXT,180,300);
+                                /*--------------------------------------------------------*/
+
+                                    while(running)
+                                            {
+                                                SDL_PollEvent(event);
+
+                                                /*------------------------------------------------------------*/
+                                                  switch(event->type)
+                                                        {
+                                                            case SDL_QUIT:
+                                                                running = SDL_FALSE;
+                                                                keepProcess = SDL_FALSE;
+                                                                    break;
+                                                        }
+
+                                                  //if(Boxes_TestCollision(BoxesPos,event,58,60,CLICK,&index))
+                                                  if(Boxes_TestEvent(event,CLICK,&index))
+                                                        {
+                                                            int i = ( index.Y * 12 ) + index.X ;
+                                                            set_position(&BoxesPos[index.X][index.Y],0,0);
+                                                            set_position(&peoplePos[index.X][index.Y],0,0);
+                                                            box_shift(peopleOn,i,24);
+                                                            running = SDL_FALSE;
+                                                        }
+                                                /*------------------------------------------------------------*/
+                                            mixe_Colors(&color);
+                                            text_Surface = TTF_RenderText_Blended(font,"CHOOSE YOUR BOX",color);
+
+                                                /*----------------------------------------------*/
+                                                            SDL_BlitSurface(background1,NULL,screen,posBackground);
+                                                            SDL_BlitSurface(background2,NULL,screen,posBackground);
+                                                            SDL_BlitSurface(table,NULL,screen,posTable);
+                                                            blitSurfaces(screen,boxesOff,BoxesPos,12,BOX);
+                                                            boxChoice(screen,boxesOn,NULL,BoxesPos,BoxesPos,event);
+                                                            SDL_BlitSurface(text_Surface,NULL,screen,&posTXT);
+                                                            SDL_Flip(screen);
+
+                                                            SDL_FreeSurface(text_Surface);
+                                            }
+
+                                /*--------------------------------------------------------*/
+
+                                TTF_CloseFont(font);
+
+                                return keepProcess;
+                        }
+
+        /*-----------------------------------------------------------------------------------*/
+
+            void mixe_Colors(SDL_Color *color)
+                    {
+                      static int colorState[3] = {};
+
+                    /*----------------------------------------------*/
+                        if(color->r == 255)
+                            colorState[0] = COLOR_DOWN;
+                        if(color->r == 0)
+                            colorState[0] = COLOR_UP;
+
+                        if(color->g == 255)
+                            colorState[1] = COLOR_DOWN;
+                        if(color->g == 0)
+                            colorState[1] = COLOR_UP;
+
+                        if(color->b == 255)
+                            colorState[2] = COLOR_DOWN;
+                        if(color->b == 0)
+                            colorState[2] = COLOR_UP;
+
+                    /*----------------------------------------------*/
+
+
+                                    if(colorState[0] == COLOR_DOWN)
+                                        color->r--;
+                                    else
+                                        color->r++;
+
+                                    if(colorState[1] == COLOR_DOWN)
+                                        color->g--;
+                                    else
+                                        color->g++;
+
+                                    if(colorState[2] == COLOR_DOWN)
+                                        color->b--;
+                                    else
+                                        color->b++;
+
+
+                    }
 
 
 

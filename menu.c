@@ -46,7 +46,7 @@
              /*-------------------------INITIALISATION-------------------------*/
 
 
-                    result = FMOD_System_CreateSound(system,"SOUNDS/menuSound.mp3",FMOD_CREATESTREAM |FMOD_2D,0,&openingSound);
+                    result = FMOD_System_CreateSound(system,"SOUNDS/menuSound.mp3",FMOD_CREATESTREAM |FMOD_2D | FMOD_LOOP_NORMAL,0,&openingSound);
 
                         if(result != FMOD_OK)
                             SDL_ExitWithError(FMOD,"Initialization error of FMOD SOUND");
@@ -111,6 +111,7 @@
 
              /*-------------------------INITIALISATION-------------------------*/
 
+                FMOD_Sound_SetLoopCount(openingSound,-1);
                 FMOD_System_PlaySound(system,openingSound,0,0,NULL);
 
                     while(running)
