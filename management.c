@@ -250,3 +250,36 @@
                     event->button.y = HEIGHT /2;
 
                 }
+
+
+   SDL_bool wait(Uint32 time, SDL_bool *run )
+                    {
+                        Uint32 previousTime = SDL_GetTicks();
+                        SDL_Event event;
+                        SDL_bool running = SDL_TRUE;
+
+                        while( (SDL_GetTicks() - previousTime) < time || *run)
+                                    {
+                                        SDL_PollEvent(&event);
+
+                                            switch(event.type)
+                                                    {
+                                                        case SDL_QUIT:
+                                                            running = SDL_FALSE;
+                                                                return running;
+                                                                    break;
+
+                                                        case SDL_KEYDOWN:
+                                                            switch(event.key.keysym.sym)
+                                                                    {
+                                                                        case SDLK_f:
+                                                                                return SDL_TRUE;
+                                                                                    break;
+                                                                    }
+                                                                    break;
+                                                    }
+
+                                    }
+                                    *run = SDL_FALSE;
+                                        return running;
+                    }

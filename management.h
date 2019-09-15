@@ -39,6 +39,7 @@
     SDL_bool  Boxes_TestEvent(SDL_Event *event , EVENT_TYPE mouse , boxIndex *index);
     void box_shift(SDL_Surface *box[] , int beginning , int nb);
     void changeEvent(SDL_Event *event);
+    SDL_bool wait(Uint32 time, SDL_bool *run );
     /*-------------------------------------------------------------------*/
 
 #endif // MANA_GEM_ENT

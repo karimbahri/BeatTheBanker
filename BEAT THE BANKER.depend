@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1566188595 source:d:\beat the banker\management.c
+1568402402 source:d:\beat the banker\management.c
 	<stdio.h>
 	<stdlib.h>
 	<SDL.h>
@@ -214,7 +214,7 @@
 
 1566188126 d:\beat the banker\consts.h
 
-1566086452 d:\beat the banker\management.h
+1568402402 d:\beat the banker\management.h
 	"consts.h"
 	"game.h"
 
@@ -244,9 +244,9 @@
 
 1563332126 d:\beat the banker\menu.h
 
-1566072318 d:\beat the banker\game.h
+1568562626 d:\beat the banker\game.h
 
-1566191295 source:d:\beat the banker\game.c
+1568554820 source:d:\beat the banker\game.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
