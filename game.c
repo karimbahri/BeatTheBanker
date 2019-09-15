@@ -76,10 +76,13 @@
                             if(table == NULL)
                                 SDL_ExitWithError(IMG,"Initialization error of SDL_Surface");
 
-                        txtFont = TTF_OpenFont("Calculator.ttf",25);
+                        txtFont = TTF_OpenFont("calibri.ttf",25);
 
-                        textSurface = TTF_RenderText_Solid(txtFont,"Press F to hide the amountsBoard .",color);
-                        set_position(&textPos,375,655);
+                            if(txtFont == NULL)
+                                SDL_ExitWithError(TTF,"Initialization error of TTF_Font");
+
+                        textSurface = TTF_RenderText_Blended(txtFont,"Press F to hide the amountsBoard .",color);
+                        set_position(&textPos,350,655);
                         set_position(&posBackground,0,0);
                         set_position(&posTable,95,555);
                         set_position(&posNumber,5,35);
