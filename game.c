@@ -35,14 +35,16 @@
 
                     TTF_Font *txtFont = NULL;
                     SDL_Surface *Amounts[24][17] = {NULL};
-                    SDL_Surface *peopleOn[24] = {NULL} , *peopleOff[24] = {NULL} , *boxeOff[24] = {NULL} , *boxeOn[24] = {NULL} , *boxesNumberSurface[24] = {NULL};
+                    SDL_Surface *peopleOn[24] = {NULL} , *peopleOff[24] = {NULL} , *boxes[24] = {NULL} , *boxeOff[24] = {NULL} , *boxeOn[24] = {NULL} , *boxesNumberSurface[24] = {NULL} , *boxesOpen[4] = {NULL};
                     SDL_Surface *background1 = NULL , *background2 = NULL , *table = NULL , *textSurface = NULL;
                     SDL_Event event;
                     SDL_Rect boxesPos[12][2] , peoplePos[12][2] , amountPos[12][2] , posBackground , posTable , posNumber , textPos;
                     SDL_Color color = { 212 , 255 , 0 };
-                    SDL_bool running = SDL_TRUE , SHOW_MODE = SDL_FALSE; //LIMITED OR EXTENDED
+                    boxIndex index;
+                    SDL_bool running = SDL_TRUE , OPEN_THE_BOX = SDL_FALSE , SHOW_MODE = SDL_FALSE; //LIMITED OR EXTENDED
                     RUN_SITUATION situation = BOX_CHOICE;
-                    int *boxNumber = NULL;
+                    int *boxNumber = NULL , *boxAmounts = NULL ;
+                    int boxRow = 0;
 
                     /*-------------------------DECLARATIONS-------------------------*/
 
@@ -54,6 +56,8 @@
 
                      //   if(font == NULL)
                        //     SDL_ExitWithError(TTF,"Initialization error of TTF FONT");
+
+                       srand(time(NULL));
 
                         peopleSurface_Create(peopleOn,peopleOff,24);
 
@@ -89,9 +93,18 @@
                         peoplePos_Create(peoplePos,12);
                         amountsPos_Create(amountPos,12);
                         boxesPos_Create(boxesPos,12);
+                        boxesOpen_Create(boxesOpen,4);
                         boxNumber = generateNumber_Boxes(24);
                         CreateNumberSurface_box(boxesNumberSurface,NULL,boxNumber,24);
                         boxesSurface_Create(boxeOn,boxeOff,boxesNumberSurface,&posNumber,24);
+                        boxAmounts = generateNumber_Boxes(24);
+                        boxes_Create(boxes,boxAmounts,24);
+
+
+                        /*----------------------------------------------------*/
+                        for(int i = 0 ; i < 24 ; i++)
+                            fprintf(stderr,"[%d].[%d]\n",boxNumber[i],boxAmounts[i]);
+                        /*----------------------------------------------------*/
 
 
                         /*-------------------------INITIALISATION-------------------------*/
@@ -120,8 +133,12 @@
                                                                         situation = SHOW_AMOUNT;
                                                                         SHOW_MODE = SDL_TRUE; // EXTENDED.
                                                                             break;
+
                                                             }
                                                             break;
+
+
+
 
 
 
@@ -132,7 +149,9 @@
                                         SDL_BlitSurface(table,NULL,screen,&posTable);
                                         blitSurfaces(screen,peopleOff,peoplePos,12,PEOPLE);
                                         blitSurfaces(screen,boxeOff,boxesPos,12,BOX);
-                                        boxChoice(screen,boxeOn,peopleOn,boxesPos,peoplePos,&event,situation);
+                                        boxChoice(screen,boxeOn,peopleOn,boxesPos,peoplePos,&event,situation,&OPEN_THE_BOX,&boxRow,&index);
+                                        boxesOpen_Blit(boxes[boxRow],boxesOpen,screen,&boxesPos[index.X][index.Y],&amountPos[(boxAmounts[boxRow] - 1)% 12 ][(boxAmounts[boxRow] - 1)/ 12 ],&OPEN_THE_BOX,&running,4);
+                                        //AllBoxesOpen_Blit(boxes,screen,boxesPos,12);
                                         blitAmounts(screen,Amounts,amountPos,textSurface,&textPos,24,&situation,&running,&SHOW_MODE);
                                         SDL_Flip(screen);
 
@@ -143,9 +162,12 @@
 
 
 
-                        /*------------------------------MEMORIE RELEASE------------------------------*/
+                        /*------------------------------MEMORY RELEASE------------------------------*/
 
                                 free(boxNumber);
+                                free(boxAmounts);
+                                boxes_Realease(boxes,24);
+                                boxesOpen_Release(boxesOpen,4);
                                 peopleSurface_Release(peopleOn,peopleOff,24);
                                 AmountsSurface_Release(Amounts,24,17);
                                 TTF_CloseFont(txtFont);
@@ -153,7 +175,7 @@
                                 SDL_FreeSurface(background1);
                                 SDL_FreeSurface(background2);
 
-                        /*------------------------------MEMORIE RELEASE------------------------------*/
+                        /*------------------------------MEMORY RELEASE------------------------------*/
 
 
                 }
@@ -185,6 +207,108 @@
 
 
                             }
+
+
+     /*-----------------------------------------------------------------------------------*/
+
+        void boxesOpen_Create(SDL_Surface *boxesOpen[] , int nb)
+            {
+                char txt[20] = {NULL};
+
+                for(int i = 0 ; i < nb ; i++)
+                    {
+                        sprintf(txt,"sprites/boxes/%d.png",i + 3);
+                        boxesOpen[i] = IMG_Load(txt);
+
+                            if(boxesOpen[i] == NULL)
+                                SDL_ExitWithError(IMG,"Initialization error of SDL_Surface");
+
+                    }
+
+
+            }
+
+     /*-----------------------------------------------------------------------------------*/
+
+        void boxesOpen_Release(SDL_Surface *boxesOpen[] , int nb)
+            {
+                for(int i = 0 ; i < nb ; i++)
+                    SDL_FreeSurface(boxesOpen[i]);
+
+
+            }
+
+     /*-----------------------------------------------------------------------------------*/
+
+        void boxes_Create(SDL_Surface *boxes[] , const int boxAmount[] , int nb)
+            {
+                char txt[21] = {NULL};
+
+                    for(int i = 0 ; i < nb ; i++)
+                    {
+                        sprintf(txt,"sprites/boxes/%d.png",boxAmount[i] + 6);
+                        boxes[i] = IMG_Load(txt);
+
+                            if(boxes[i] == NULL)
+                                SDL_ExitWithError(IMG,"Initialization error of SDL_Surface");
+
+                    }
+
+            }
+
+     /*-----------------------------------------------------------------------------------*/
+        void boxes_Realease(SDL_Surface *boxes[] , int nb)
+            {
+                for(int i = 0 ; i < nb ; i++)
+                    SDL_FreeSurface(boxes[i]);
+
+            }
+
+     /*-----------------------------------------------------------------------------------*/
+
+       void boxesOpen_Blit(SDL_Surface *box , SDL_Surface *boxesOpen[] , SDL_Surface *screen , SDL_Rect *boxesOpenPos , SDL_Rect *AmountsPos , SDL_bool *OPEN_THE_BOX , SDL_bool *running , int nb)
+            {
+               if(*OPEN_THE_BOX)
+               {
+                SDL_bool ShowMode = SDL_FALSE;
+                static int i = 0;
+                static Uint32 time = 0;
+
+                if(i < nb )
+                {
+                    SDL_BlitSurface(boxesOpen[i],NULL,screen,boxesOpenPos);
+                    i++;
+
+                }
+
+                if(i == nb)
+                {
+                   SDL_BlitSurface(box,NULL,screen,boxesOpenPos);
+                   SDL_Flip(screen);
+                   *running = wait(2000,&ShowMode,0);
+                   set_position(boxesOpenPos,0,0) , set_position(AmountsPos,0,0);
+                   *OPEN_THE_BOX = SDL_FALSE;
+                   i = 0;
+                }
+
+
+               }
+            }
+
+
+      void AllBoxesOpen_Blit(SDL_Surface *boxes[] , SDL_Surface *screen , SDL_Rect boxesPos[][2] , int nb)
+                {
+                   int k = 0;
+                    for(int j = 0 ; j < 2 ; j++)
+                        for(int i = 0 ; i < nb ; i++)
+                                {
+                                   if(boxesPos[i][j].x && boxesPos[i][j].y)
+                                        SDL_BlitSurface(boxes[k],NULL,screen,&boxesPos[i][j]);
+                                    k++;
+
+                                }
+
+                }
 
      /*-----------------------------------------------------------------------------------*/
 
@@ -239,6 +363,8 @@
                         }
 
                 }
+
+
 
 
      /*-----------------------------------------------------------------------------------*/
@@ -333,7 +459,7 @@
                                             /*-----------------------------SHOW--TEXT-----------------------------*/
 
                                             if(AMOUNT_BLIT && (amountX_index == 16))
-                                               *running = wait(3000,SHOW_MODE);
+                                               *running = wait(3000,SHOW_MODE,SDLK_f);
 
 
                                              /*------------------HIDE---AMOUNT------------------*/
@@ -397,31 +523,53 @@
 
            /*-----------------------------------------------------------------------------------*/
 
-   boxIndex boxChoice(SDL_Surface *screen , SDL_Surface *boxeOn[] , SDL_Surface *peopleOn[] , SDL_Rect boxesPos[][2] , SDL_Rect peoplePos[][2] , SDL_Event *event , RUN_SITUATION situation)
+   boxIndex boxChoice(SDL_Surface *screen , SDL_Surface *boxeOn[] , SDL_Surface *peopleOn[] , SDL_Rect boxesPos[][2] , SDL_Rect peoplePos[][2] , SDL_Event *event , RUN_SITUATION situation , SDL_bool *OPEN_THE_BOX , int *boxRow , boxIndex *index)
                     {
+
 
                         if(!situation)
                             {
-
-                                boxIndex index;
                                 int i = 0;
 
                                 /*--------------------------------------------------------------------------*/
-                                               //if(Boxes_TestCollision(boxesPos,event,58,60,MOTION,&index))
-                                               if(Boxes_TestEvent(event,MOTION,&index))
+                                               //if(Boxes_TestCollision(boxesPos,event,58,60,MOTION,index))
+                                               if(Boxes_TestEvent(event,MOTION,index))
                                                 {
-                                                   if(boxesPos[index.X][index.Y].x && boxesPos[index.X][index.Y].y)
+                                                   if(boxesPos[index->X][index->Y].x && boxesPos[index->X][index->Y].y)
                                                    {
-                                                    i = ( index.Y * 12 ) + index.X ;
+                                                    i = ( index->Y * 12 ) + index->X ;
                                                         if(peopleOn != NULL)
-                                                            SDL_BlitSurface(peopleOn[i],NULL,screen,&peoplePos[index.X][index.Y]);
+                                                            SDL_BlitSurface(peopleOn[i],NULL,screen,&peoplePos[index->X][index->Y]);
 
                                                         if(boxeOn != NULL)
-                                                            SDL_BlitSurface(boxeOn[i],NULL,screen,&boxesPos[index.X][index.Y]);
+                                                            SDL_BlitSurface(boxeOn[i],NULL,screen,&boxesPos[index->X][index->Y]);
                                                    }
                                                 }
 
+
+                              /*--------------------------------------------------------------------------*/
+
+                                             if(Boxes_TestEvent(event,CLICK,index))
+                                                {
+                                                   if(boxesPos[index->X][index->Y].x && boxesPos[index->X][index->Y].y)
+                                                   {
+                                                    i = ( index->Y * 12 ) + index->X ;
+
+                                                    *boxRow = i;
+
+                                                    *OPEN_THE_BOX = SDL_TRUE;
+
+                                                    changeEvent(event);
+
+                                                        return *index;
+
+                                                   }
+                                                }
+
+
+
                             }
+                            return *index;
                     }
 
      /*-----------------------------------------------------------------------------------*/
@@ -492,7 +640,7 @@
     int *generateNumber_Boxes( int numb)
                                     {
                                         int tmp = 0 , r = 0;
-                                        srand(time(NULL));
+                                        //srand(time(NULL));
 
                                         int *boxesNumber = malloc(numb * sizeof(int));
 
@@ -515,6 +663,8 @@
 
 
                                                         }
+
+
 
                                           return boxesNumber;
                                     }
@@ -585,7 +735,7 @@
                                                             SDL_BlitSurface(background2,NULL,screen,posBackground);
                                                             SDL_BlitSurface(table,NULL,screen,posTable);
                                                             blitSurfaces(screen,boxesOff,BoxesPos,12,BOX);
-                                                            boxChoice(screen,boxesOn,NULL,BoxesPos,BoxesPos,event,0);
+                                                            boxChoice(screen,boxesOn,NULL,BoxesPos,BoxesPos,event,0,0,0,&index);
                                                             SDL_BlitSurface(text_Surface,NULL,screen,&posTXT);
                                                             SDL_Flip(screen);
 

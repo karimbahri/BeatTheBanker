@@ -252,7 +252,7 @@
                 }
 
 
-   SDL_bool wait(Uint32 time, SDL_bool *run )
+   SDL_bool wait(Uint32 time, SDL_bool *run , SDLKey SDLK )
                     {
                         Uint32 previousTime = SDL_GetTicks();
                         SDL_Event event;
@@ -270,12 +270,14 @@
                                                                     break;
 
                                                         case SDL_KEYDOWN:
-                                                            switch(event.key.keysym.sym)
+                                                          /*  switch(event.key.keysym.sym)
                                                                     {
-                                                                        case SDLK_f:
+                                                                        case SDLK:
                                                                                 return SDL_TRUE;
                                                                                     break;
-                                                                    }
+                                                                    }*/
+                                                             if(event.key.keysym.sym == SDLK)
+                                                                        return SDL_TRUE;
                                                                     break;
                                                     }
 
